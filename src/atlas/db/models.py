@@ -1,11 +1,10 @@
 from __future__ import annotations
 
-from datetime import date
-
 from sqlalchemy import ForeignKey, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from atlas.db.database import Base
+from datetime import date
 
 
 class Company(Base):
@@ -44,7 +43,10 @@ class Document(Base):
     id: Mapped[int] = mapped_column(primary_key=True)
 
     company_id: Mapped[int] = mapped_column(
-        ForeignKey("companies.id", ondelete="CASCADE"),
+        ForeignKey(
+            "companies.id",
+            ondelete="CASCADE",
+        ),
         nullable=False,
         index=True,
     )
@@ -68,6 +70,12 @@ class Document(Base):
         nullable=False,
     )
 
+    accession_number: Mapped[str | None] = mapped_column(
+        String(32),
+        nullable=True,
+        index=True,
+    )
+
     company: Mapped[Company] = relationship(
         back_populates="documents",
     )
@@ -76,10 +84,18 @@ class Document(Base):
         back_populates="document",
         cascade="all, delete-orphan",
     )
-    accession_number: Mapped[str | None] = mapped_column(
-        String(32),
-        nullable=True,
-        index=True,
+
+    __table_args__ = (
+        UniqueConstraint(
+            "company_id",
+            "accession_number",
+            name="uq_document_company_accession",
+        ),
+        UniqueConstraint(
+            "company_id",
+            "source_url",
+            name="uq_document_company_source",
+        ),
     )
 
 
