@@ -26,9 +26,7 @@ def main(ticker: str) -> None:
         )
 
         if document is None:
-            raise ValueError(
-                f"No 10-K found for {ticker}. Run SEC metadata ingestion first."
-            )
+            raise ValueError(f"No 10-K found for {ticker}. Run SEC metadata ingestion first.")
 
         if document.accession_number is None:
             raise ValueError("Document has no accession number.")

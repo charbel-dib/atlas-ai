@@ -36,16 +36,10 @@ class SecClient:
             try:
                 response = self.client.get(url)
 
-                if (
-                    response.status_code in RETRYABLE_STATUS_CODES
-                    and attempt < self.max_attempts
-                ):
+                if response.status_code in RETRYABLE_STATUS_CODES and attempt < self.max_attempts:
                     wait_seconds = 2 ** (attempt - 1)
 
-                    print(
-                        f"SEC returned {response.status_code}. "
-                        f"Retrying in {wait_seconds}s."
-                    )
+                    print(f"SEC returned {response.status_code}. Retrying in {wait_seconds}s.")
 
                     time.sleep(wait_seconds)
                     continue

@@ -30,3 +30,10 @@ logs/
 
 # Local artifacts
 *.sqlite
+
+# Packaging / coverage
+*.egg-info/
+dist/
+build/
+.coverage
+htmlcov/

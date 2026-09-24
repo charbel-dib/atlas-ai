@@ -1,10 +1,11 @@
 from __future__ import annotations
 
+from datetime import date
+
 from sqlalchemy import ForeignKey, String, Text, UniqueConstraint
 from sqlalchemy.orm import Mapped, mapped_column, relationship
 
 from atlas.db.database import Base
-from datetime import date
 
 
 class Company(Base):
@@ -99,27 +100,16 @@ class Document(Base):
     )
 
 
-__table_args__ = (
-    UniqueConstraint(
-        "company_id",
-        "accession_number",
-        name="uq_document_company_accession",
-    ),
-    UniqueConstraint(
-        "company_id",
-        "source_url",
-        name="uq_document_company_source",
-    ),
-)
-
-
 class Chunk(Base):
     __tablename__ = "chunks"
 
     id: Mapped[int] = mapped_column(primary_key=True)
 
     document_id: Mapped[int] = mapped_column(
-        ForeignKey("documents.id", ondelete="CASCADE"),
+        ForeignKey(
+            "documents.id",
+            ondelete="CASCADE",
+        ),
         nullable=False,
         index=True,
     )
